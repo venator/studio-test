@@ -7,7 +7,7 @@ sections:
   - type: hero
     id: hero
     variant: split
-    heading: Du pain au levain, cuit chaque matin
+    heading: Du bon pain, chaque matin
     subheading: Ouvert du mardi au dimanche, dès 07:00.
     image:
       src: images/hero.jpg
