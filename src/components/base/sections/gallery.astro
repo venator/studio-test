@@ -1,0 +1,34 @@
+---
+import { Image } from "astro:assets";
+import { entry, field, sectionAttrs } from "../../../lib/markers";
+import type { SectionContext, SectionOf } from "../../../lib/site";
+
+interface Props {
+  section: SectionOf<"gallery">;
+  ctx: SectionContext;
+}
+const { section: s, ctx } = Astro.props;
+const Heading = ctx.headingTag;
+const items = await ctx.items("gallery", s.items);
+---
+
+<section {...sectionAttrs(s)}>
+  <div class="container">
+    {s.heading && <Heading {...field("heading")} set:html={ctx.text(s.heading)} />}
+    <ul class="gallery">
+      {
+        items.map((it) => {
+          const img = ctx.resolveImage(it.data.image.src);
+          return (
+            <li class="gallery__item" {...entry(it.entry)}>
+              <figure>
+                {img && <Image src={img} alt={it.data.image.alt} widths={[400, 800]} sizes="(min-width: 960px) 33vw, 50vw" class="media" />}
+                {it.data.caption && <figcaption {...field("caption")} set:html={ctx.text(it.data.caption)} />}
+              </figure>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</section>

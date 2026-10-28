@@ -1,0 +1,13 @@
+title: Prices
+slug: prices
+menuOrder: 2
+sections:
+  - type: pricing
+    id: prix
+    variant: table
+    heading: Our prices
+    intro: Prices per item, tax included.
+    note: Seasonal cakes are made to order, 48 hours in advance.
+translation:
+  sourceLocale: fr
+  sourceHash: c61b62d71e39537f

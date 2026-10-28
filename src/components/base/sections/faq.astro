@@ -1,0 +1,28 @@
+---
+import { entry, field, sectionAttrs } from "../../../lib/markers";
+import type { SectionContext, SectionOf } from "../../../lib/site";
+
+interface Props {
+  section: SectionOf<"faq">;
+  ctx: SectionContext;
+}
+const { section: s, ctx } = Astro.props;
+const Heading = ctx.headingTag;
+const items = await ctx.items("faqs", s.items);
+---
+
+<section {...sectionAttrs(s)}>
+  <div class="container container--narrow">
+    {s.heading && <Heading {...field("heading")} set:html={ctx.text(s.heading)} />}
+    <div class="faq">
+      {
+        items.map((it) => (
+          <details class="faq__item" {...entry(it.entry)}>
+            <summary {...field("question")} set:html={ctx.text(it.data.question)} />
+            <div class="prose" {...field("answer")} set:html={ctx.markdown(it.data.answer)} />
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>

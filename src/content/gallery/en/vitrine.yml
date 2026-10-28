@@ -1,0 +1,8 @@
+image:
+  src: images/vitrine.jpg
+  alt: The shop window in the morning
+caption: The shop window
+order: 3
+translation:
+  sourceLocale: fr
+  sourceHash: 32147b4cfbabd6ce

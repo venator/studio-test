@@ -1,0 +1,10 @@
+name: Seasonal tart
+summary: Market fruit, serves 6.
+price: 24 €
+image:
+  src: images/tarte.jpg
+  alt: Seasonal fruit tart
+order: 3
+translation:
+  sourceLocale: fr
+  sourceHash: 87199e6589a697a1

@@ -1,0 +1,40 @@
+---
+import { labels } from "../../../lib/labels";
+import { entry, field, sectionAttrs } from "../../../lib/markers";
+import type { SectionContext, SectionOf } from "../../../lib/site";
+
+interface Props {
+  section: SectionOf<"pricing">;
+  ctx: SectionContext;
+}
+const { section: s, ctx } = Astro.props;
+const Heading = ctx.headingTag;
+const l = labels(ctx.locale);
+const items = (await ctx.items("services", s.items)).filter((it) => it.data.price);
+---
+
+<section {...sectionAttrs(s)}>
+  <div class="container container--narrow">
+    {s.heading && <Heading {...field("heading")} set:html={ctx.text(s.heading)} />}
+    {s.intro && <p class="section__intro" {...field("intro")} set:html={ctx.text(s.intro)} />}
+    <table class="prices">
+      <thead>
+        <tr><th scope="col"><span class="visually-hidden">{l.price}</span></th><th scope="col">{l.price}</th></tr>
+      </thead>
+      <tbody>
+        {
+          items.map((it) => (
+            <tr {...entry(it.entry)}>
+              <th scope="row">
+                <span {...field("name")} set:html={ctx.text(it.data.name)} />
+                <span class="prices__summary" {...field("summary")} set:html={ctx.text(it.data.summary)} />
+              </th>
+              <td {...field("price")} set:html={ctx.text(it.data.price)} />
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+    {s.note && <p class="section__note" {...field("note")} set:html={ctx.text(s.note)} />}
+  </div>
+</section>

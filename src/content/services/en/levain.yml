@@ -1,0 +1,10 @@
+name: Sourdough loaf
+summary: 1 kg loaf, thick crust, open crumb.
+price: 6,80 €
+image:
+  src: images/levain.jpg
+  alt: A sourdough loaf cut in half
+order: 1
+translation:
+  sourceLocale: fr
+  sourceHash: 62c4474d70f55431

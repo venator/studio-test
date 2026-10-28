@@ -1,0 +1,121 @@
+---
+// Base page layout: landmarks, skip link, header with menu and language
+// switcher, footer with contact details. Themes restyle it through tokens and
+// their stylesheets, or replace it with src/theme/Layout.astro.
+import "../../styles/base.css";
+import "../../styles/theme";
+import { labels, languageName } from "../../lib/labels";
+import { pagePath, pagesIn, resolveImage, type Site, type Strings } from "../../lib/site";
+import { rootAttributes } from "../../lib/tokens";
+import { Image } from "astro:assets";
+import Head from "./Head.astro";
+
+
+interface Props {
+  locale: string;
+  site: Site;
+  strings: Strings;
+  title: string;
+  description?: string | null;
+  path: string;
+  alternates: Array<{ locale: string; path: string }>;
+  noindex?: boolean;
+}
+
+const { locale, site, strings, title, description, path, alternates, noindex } = Astro.props;
+const defaultLocale = site.locales[0]!;
+const l = labels(locale);
+const menu = (await pagesIn(locale)).filter((p) => p.data.inMenu !== false);
+const logo = resolveImage(site.logo?.src);
+const homePath = pagePath(locale, defaultLocale, "");
+const other = site.locales.map((loc) => ({
+  locale: loc,
+  path: alternates.find((a) => a.locale === loc)?.path ?? pagePath(loc, defaultLocale, ""),
+}));
+const year = new Date().getUTCFullYear();
+---
+
+<!doctype html>
+<html lang={locale} {...rootAttributes(site)}>
+  <head>
+    <Head {site} {strings} {title} {description} {path} {alternates} {locale} {noindex} />
+  </head>
+  <body>
+    <a class="skip-link" href="#content">{l.skip}</a>
+    <header class="site-header">
+      <div class="container site-header__inner">
+        <a class="brand" href={homePath}>
+          {logo ? <Image src={logo} alt="" height={48} class="brand__logo" /> : null}
+          <span class="brand__name">{site.businessName}</span>
+        </a>
+        <nav class="site-nav" aria-label={l.menu}>
+          <details class="site-nav__toggle">
+            <summary>{l.menu}</summary>
+            <ul class="site-nav__list">
+              {
+                menu.map((p) => {
+                  const href = pagePath(locale, defaultLocale, p.data.slug);
+                  return (
+                    <li>
+                      <a href={href} aria-current={href === path ? "page" : undefined}>
+                        {p.data.menuLabel || p.data.title}
+                      </a>
+                    </li>
+                  );
+                })
+              }
+            </ul>
+          </details>
+        </nav>
+        {
+          site.locales.length > 1 && (
+            <nav class="language-switcher" aria-label={l.language}>
+              <ul>
+                {other.map((o) => (
+                  <li>
+                    <a
+                      href={o.path}
+                      hreflang={o.locale}
+                      lang={o.locale}
+                      aria-current={o.locale === locale ? "true" : undefined}
+                    >
+                      {languageName(o.locale)}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )
+        }
+      </div>
+    </header>
+    <main id="content" tabindex="-1">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="container site-footer__inner">
+        {strings.footerText && <p class="site-footer__text">{strings.footerText}</p>}
+        <ul class="site-footer__contact">
+          {site.contact.phone && <li><a href={`tel:${site.contact.phone.replace(/\s/g, "")}`}>{site.contact.phone}</a></li>}
+          {site.contact.email && <li><a href={`mailto:${site.contact.email}`}>{site.contact.email}</a></li>}
+        </ul>
+        {
+          (site.socials ?? []).length > 0 && (
+            <ul class="site-footer__socials">
+              {(site.socials ?? []).map((s) => (
+                <li>
+                  <a href={s.url} rel="me noopener">
+                    {s.network === "other" ? s.url.replace(/^https?:\/\//, "") : s.network}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )
+        }
+        <p class="site-footer__legal">
+          © {year} {site.legal?.companyName || site.businessName}
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

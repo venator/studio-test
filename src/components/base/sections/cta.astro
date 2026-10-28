@@ -1,0 +1,19 @@
+---
+import { field, sectionAttrs } from "../../../lib/markers";
+import type { SectionContext, SectionOf } from "../../../lib/site";
+
+interface Props {
+  section: SectionOf<"cta">;
+  ctx: SectionContext;
+}
+const { section: s, ctx } = Astro.props;
+const Heading = ctx.headingTag;
+---
+
+<section {...sectionAttrs(s)}>
+  <div class="container cta__inner">
+    <Heading {...field("heading")} set:html={ctx.text(s.heading)} />
+    {s.body && <p {...field("body")} set:html={ctx.text(s.body)} />}
+    <p><a class="button" href={ctx.href(s.button.href)} {...field("button")} set:html={ctx.text(s.button.label)} /></p>
+  </div>
+</section>

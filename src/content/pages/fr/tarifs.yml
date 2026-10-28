@@ -1,0 +1,10 @@
+title: Tarifs
+slug: tarifs
+menuOrder: 2
+sections:
+  - type: pricing
+    id: prix
+    variant: table
+    heading: Nos prix
+    intro: Prix à l'unité, toutes taxes comprises.
+    note: Les gâteaux de saison sont sur commande, 48 heures à l'avance.

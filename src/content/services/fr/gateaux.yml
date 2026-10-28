@@ -1,0 +1,7 @@
+name: Tarte de saison
+summary: Fruits du marché, pour 6 personnes.
+price: 24 €
+image:
+  src: images/tarte.jpg
+  alt: Tarte aux fruits de saison
+order: 3

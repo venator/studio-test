@@ -1,0 +1,10 @@
+name: All-butter croissant
+summary: Laminated with Charentes butter.
+price: 1,40 €
+image:
+  src: images/croissants.jpg
+  alt: Golden croissants on a baking tray
+order: 2
+translation:
+  sourceLocale: fr
+  sourceHash: 252140f1c34d047e

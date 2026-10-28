@@ -1,0 +1,36 @@
+---
+import { Image } from "astro:assets";
+import { entry, field, sectionAttrs } from "../../../lib/markers";
+import type { SectionContext, SectionOf } from "../../../lib/site";
+
+interface Props {
+  section: SectionOf<"team">;
+  ctx: SectionContext;
+}
+const { section: s, ctx } = Astro.props;
+const Heading = ctx.headingTag;
+const Sub = ctx.subheadingTag;
+const items = await ctx.items("team", s.items);
+---
+
+<section {...sectionAttrs(s)}>
+  <div class="container">
+    {s.heading && <Heading {...field("heading")} set:html={ctx.text(s.heading)} />}
+    {s.intro && <p class="section__intro" {...field("intro")} set:html={ctx.text(s.intro)} />}
+    <ul class="cards">
+      {
+        items.map((it) => {
+          const img = ctx.resolveImage(it.data.photo?.src);
+          return (
+            <li class="card" {...entry(it.entry)}>
+              {img && <Image src={img} alt={it.data.photo?.alt ?? ""} widths={[320, 640]} sizes="(min-width: 960px) 25vw, 50vw" class="media card__media" />}
+              <Sub class="card__title" {...field("name")}>{it.data.name}</Sub>
+              <p class="card__meta" {...field("role")} set:html={ctx.text(it.data.role)} />
+              {it.data.bio && <div class="prose" {...field("bio")} set:html={ctx.markdown(it.data.bio)} />}
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</section>

@@ -1,0 +1,22 @@
+title: Notre histoire
+slug: a-propos
+menuOrder: 1
+sections:
+  - type: image-text
+    id: histoire
+    variant: image-left
+    heading: Une boulangerie de quartier
+    body: |-
+      Nous travaillons des farines de meules d'Auvergne et un levain nourri chaque jour.
+
+      Tout est façonné à la main, dans le fournil que vous voyez depuis la boutique.
+    image:
+      src: images/fournil.jpg
+      alt: Le fournil, avec le four à sole et les bannetons
+  - type: team
+    id: equipe
+    heading: L'équipe
+  - type: gallery
+    id: photos
+    variant: grid
+    heading: Au fournil

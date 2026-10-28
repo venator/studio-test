@@ -1,0 +1,9 @@
+name: Marc
+role: Pastry chef
+photo:
+  src: images/marc.jpg
+  alt: Marc decorating a tart
+order: 2
+translation:
+  sourceLocale: fr
+  sourceHash: 554d17953880b747

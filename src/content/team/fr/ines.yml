@@ -1,0 +1,7 @@
+name: Inès
+role: Boulangère
+bio: Formée à Paris, installée à Lyon depuis dix ans.
+photo:
+  src: images/ines.jpg
+  alt: Inès dans le fournil
+order: 1

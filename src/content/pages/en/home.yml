@@ -1,0 +1,39 @@
+title: Home
+slug: ""
+description: Sourdough bread and pastries in Croix-Rousse, Lyon.
+menuOrder: 0
+menuLabel: Home
+sections:
+  - type: hero
+    id: hero
+    variant: split
+    heading: Sourdough bread, baked every morning
+    subheading: Open Tuesday to Sunday, from 07:00.
+    image:
+      src: images/hero.jpg
+      alt: Sourdough loaves on a wooden shelf
+    button:
+      label: See our opening hours
+      href: /en/contact/
+  - type: services
+    id: specialites
+    variant: grid
+    heading: Our specialities
+    items:
+      - levain
+      - viennoiseries
+      - gateaux
+  - type: testimonials
+    id: avis
+    heading: What our customers say
+  - type: cta
+    id: commande
+    variant: banner
+    heading: Ordering for an event?
+    body: Drop by or call us the day before, before noon.
+    button:
+      label: Contact us
+      href: /en/contact/
+translation:
+  sourceLocale: fr
+  sourceHash: 69577657f1732f82

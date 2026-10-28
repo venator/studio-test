@@ -1,0 +1,26 @@
+---
+import { Image } from "astro:assets";
+import { field, sectionAttrs } from "../../../lib/markers";
+import type { SectionContext, SectionOf } from "../../../lib/site";
+
+interface Props {
+  section: SectionOf<"image-text">;
+  ctx: SectionContext;
+}
+const { section: s, ctx } = Astro.props;
+const Heading = ctx.headingTag;
+const img = ctx.resolveImage(s.image.src);
+---
+
+<section {...sectionAttrs(s)}>
+  <div class="container split">
+    <div class="split__media" {...field("image")}>
+      {img && <Image src={img} alt={s.image.alt} widths={[480, 960]} sizes="(min-width: 960px) 50vw, 100vw" class="media" />}
+    </div>
+    <div class="split__text">
+      {s.heading && <Heading {...field("heading")} set:html={ctx.text(s.heading)} />}
+      <div class="prose" {...field("body")} set:html={ctx.markdown(s.body)} />
+      {s.button && <p><a class="button" href={ctx.href(s.button.href)} {...field("button")} set:html={ctx.text(s.button.label)} /></p>}
+    </div>
+  </div>
+</section>

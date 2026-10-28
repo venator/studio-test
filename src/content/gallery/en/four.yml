@@ -1,0 +1,8 @@
+image:
+  src: images/four.jpg
+  alt: The open oven door
+caption: The deck oven
+order: 1
+translation:
+  sourceLocale: fr
+  sourceHash: cf5e5b258009071a

@@ -1,0 +1,8 @@
+{
+  "id": "bakery",
+  "description": "Neighbourhood bakery, French and English, with prices, team, gallery and one article.",
+  "locales": [
+    "fr",
+    "en"
+  ]
+}

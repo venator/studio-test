@@ -1,0 +1,17 @@
+---
+// Picks the most specific layout: src/overrides/Layout.astro, then the theme's,
+// then the base layout.
+import type { ComponentProps } from "astro/types";
+import type BaseLayout from "./Layout.astro";
+
+type Props = ComponentProps<typeof BaseLayout>;
+const modules = import.meta.glob<{ default: unknown }>(
+  ["/src/overrides/Layout.astro", "/src/theme/Layout.astro", "/src/components/base/Layout.astro"],
+  { eager: true },
+);
+const found =
+  modules["/src/overrides/Layout.astro"] ?? modules["/src/theme/Layout.astro"] ?? modules["/src/components/base/Layout.astro"];
+const L = found!.default as (props: Props) => unknown;
+---
+
+<L {...Astro.props}><slot /></L>

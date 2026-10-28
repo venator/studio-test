@@ -1,0 +1,7 @@
+name: Croissant pur beurre
+summary: Feuilleté au beurre de Charentes.
+price: 1,40 €
+image:
+  src: images/croissants.jpg
+  alt: Croissants dorés sur une plaque
+order: 2

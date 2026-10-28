@@ -1,0 +1,38 @@
+businessName: Boulangerie des Tilleuls
+siteUrl: https://www.example.fr
+logo:
+  src: images/logo.png
+  alt: Boulangerie des Tilleuls
+contact:
+  phone: +33 1 99 00 12 34
+  email: bonjour@example.fr
+  address:
+    street: 12 rue des Tilleuls
+    postalCode: "69004"
+    city: Lyon
+    country: FR
+  coordinates:
+    lat: 45.7772
+    lng: 4.8277
+hours:
+  mon: closed
+  tue: 07:00–19:30
+  wed: 07:00–19:30
+  thu: 07:00–19:30
+  fri: 07:00–19:30
+  sat: 07:00–19:30
+  sun: 07:00–13:00
+socials:
+  - network: instagram
+    url: https://www.instagram.com/example
+legal:
+  companyName: Les Tilleuls SARL
+  companyId: 000 000 000 R.C.S. Lyon
+theme:
+  id: base
+  tokens:
+    radius: medium
+    density: regular
+locales:
+  - fr
+  - en

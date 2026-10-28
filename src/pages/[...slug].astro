@@ -1,0 +1,120 @@
+---
+// Every page and article of every locale. Routes come from content, so the
+// site is static by construction (§B2).
+import { getCollection, render } from "astro:content";
+import Layout from "../components/base/LayoutSlot.astro";
+import Section from "../components/base/Section.astro";
+import { labels } from "../lib/labels";
+import { getSite, getStrings, pagePath, sectionContext, splitId } from "../lib/site";
+
+export async function getStaticPaths() {
+  const site = await getSite();
+  const def = site.locales[0]!;
+  const pages = await getCollection("pages");
+  const posts = await getCollection("posts");
+  const toParam = (path: string) => path.replace(/^\/|\/$/g, "") || undefined;
+
+  const pageRoutes = pages
+    .filter((p) => site.locales.includes(splitId(p.id).locale))
+    .map((p) => {
+      const { locale, slug: file } = splitId(p.id);
+      return {
+        params: { slug: toParam(pagePath(locale, def, p.data.slug)) },
+        props: { kind: "page" as const, id: p.id, locale, file },
+      };
+    });
+
+  const postLocales = [...new Set(posts.map((p) => splitId(p.id).locale))].filter((l) => site.locales.includes(l));
+  const postRoutes = posts
+    .filter((p) => site.locales.includes(splitId(p.id).locale))
+    .map((p) => {
+      const { locale, slug } = splitId(p.id);
+      return {
+        params: { slug: toParam(pagePath(locale, def, `posts/${slug}`)) },
+        props: { kind: "post" as const, id: p.id, locale, file: slug },
+      };
+    });
+  const postIndexRoutes = postLocales.map((locale) => ({
+    params: { slug: toParam(pagePath(locale, def, "posts")) },
+    props: { kind: "posts" as const, id: "", locale, file: "posts" },
+  }));
+  return [...pageRoutes, ...postRoutes, ...postIndexRoutes];
+}
+
+const { kind, id, locale, file } = Astro.props;
+const site = await getSite();
+const def = site.locales[0]!;
+const strings = await getStrings(locale);
+const ctx = sectionContext(locale, def, site, strings);
+const l = labels(locale);
+
+const pages = await getCollection("pages");
+const posts = await getCollection("posts");
+const page = kind === "page" ? pages.find((p) => p.id === id) : undefined;
+const post = kind === "post" ? posts.find((p) => p.id === id) : undefined;
+const postList =
+  kind === "posts"
+    ? posts.filter((p) => splitId(p.id).locale === locale).sort((a, b) => +b.data.date - +a.data.date)
+    : [];
+
+// Same entry (same file name) in other locales.
+const alternates = site.locales.flatMap((loc) => {
+  if (kind === "page") {
+    const other = pages.find((p) => p.id === `${loc}/${file}`);
+    return other ? [{ locale: loc, path: pagePath(loc, def, other.data.slug) }] : [];
+  }
+  if (kind === "post") {
+    return posts.some((p) => p.id === `${loc}/${file}`) ? [{ locale: loc, path: pagePath(loc, def, `posts/${file}`) }] : [];
+  }
+  return posts.some((p) => splitId(p.id).locale === loc) ? [{ locale: loc, path: pagePath(loc, def, "posts") }] : [];
+});
+const path = alternates.find((a) => a.locale === locale)?.path ?? pagePath(locale, def, "");
+const title = page?.data.title ?? post?.data.title ?? l.articles;
+const description = page?.data.description ?? post?.data.summary;
+const rendered = post ? await render(post) : undefined;
+const Content = rendered?.Content;
+const dateFmt = new Intl.DateTimeFormat(locale, { dateStyle: "long", timeZone: "UTC" });
+---
+
+<Layout {locale} {site} {strings} {title} {description} {path} {alternates}>
+  {
+    page &&
+      page.data.sections.map((section, i) => (
+        <Section {section} ctx={{ ...ctx, headingTag: i === 0 ? "h1" : "h2", subheadingTag: i === 0 ? "h2" : "h3" }} />
+      ))
+  }
+  {
+    post && Content && (
+      <article class="section section--article" data-section-id="article" data-section-type="article" data-entry={`posts/${file}`}>
+        <div class="container container--narrow">
+          <h1 data-field="title" set:html={ctx.text(post.data.title)} />
+          <p class="article__date">
+            <time datetime={post.data.date.toISOString().slice(0, 10)}>{dateFmt.format(post.data.date)}</time>
+          </p>
+          <div class="prose" data-field="body">
+            <Content />
+          </div>
+        </div>
+      </article>
+    )
+  }
+  {
+    kind === "posts" && (
+      <section class="section section--articles" data-section-id="articles" data-section-type="articles">
+        <div class="container container--narrow">
+          <h1>{l.articles}</h1>
+          <ul class="article-list">
+            {postList.map((p) => (
+              <li data-entry={`posts/${splitId(p.id).slug}`}>
+                <h2>
+                  <a href={pagePath(locale, def, `posts/${splitId(p.id).slug}`)} set:html={ctx.text(p.data.title)} />
+                </h2>
+                <p set:html={ctx.text(p.data.summary)} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+</Layout>

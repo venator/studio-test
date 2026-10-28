@@ -1,0 +1,20 @@
+---
+import Layout from "../components/base/LayoutSlot.astro";
+import { labels } from "../lib/labels";
+import { getSite, getStrings, pagePath } from "../lib/site";
+
+const site = await getSite();
+const locale = site.locales[0]!;
+const strings = await getStrings(locale);
+const l = labels(locale);
+---
+
+<Layout {locale} {site} {strings} title={l.notFound} path="/404/" alternates={[]} noindex>
+  <section class="section section--not-found" data-section-id="not-found" data-section-type="not-found">
+    <div class="container container--narrow">
+      <h1>{l.notFound}</h1>
+      <p>{l.notFoundText}</p>
+      <p><a class="button" href={pagePath(locale, locale, "")}>{l.backHome}</a></p>
+    </div>
+  </section>
+</Layout>

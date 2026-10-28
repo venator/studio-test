@@ -1,0 +1,12 @@
+title: Contact and opening hours
+slug: contact
+menuOrder: 3
+menuLabel: Contact
+sections:
+  - type: contact
+    id: coordonnees
+    heading: Find us
+    body: At the top of the hill, opposite the square.
+translation:
+  sourceLocale: fr
+  sourceHash: 6071e96288c0c632

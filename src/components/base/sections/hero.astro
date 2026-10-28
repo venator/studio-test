@@ -1,0 +1,36 @@
+---
+import { Image } from "astro:assets";
+import { field, sectionAttrs } from "../../../lib/markers";
+import type { SectionContext, SectionOf } from "../../../lib/site";
+
+interface Props {
+  section: SectionOf<"hero">;
+  ctx: SectionContext;
+}
+const { section: s, ctx } = Astro.props;
+const Heading = ctx.headingTag;
+const img = ctx.resolveImage(s.image?.src);
+---
+
+<section {...sectionAttrs(s)}>
+  <div class="container hero__inner">
+    <div class="hero__text">
+      <Heading class="hero__heading" {...field("heading")} set:html={ctx.text(s.heading)} />
+      {s.subheading && <p class="hero__subheading" {...field("subheading")} set:html={ctx.text(s.subheading)} />}
+      {
+        s.button && (
+          <p class="hero__actions">
+            <a class="button" href={ctx.href(s.button.href)} {...field("button")} set:html={ctx.text(s.button.label)} />
+          </p>
+        )
+      }
+    </div>
+    {
+      img && (
+        <div class="hero__media" {...field("image")}>
+          <Image src={img} alt={s.image?.alt ?? ""} widths={[480, 960, 1600]} sizes="(min-width: 960px) 50vw, 100vw" loading="eager" class="media" />
+        </div>
+      )
+    }
+  </div>
+</section>

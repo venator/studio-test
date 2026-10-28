@@ -1,0 +1,36 @@
+---
+import { Image } from "astro:assets";
+import { entry, field, sectionAttrs } from "../../../lib/markers";
+import type { SectionContext, SectionOf } from "../../../lib/site";
+
+interface Props {
+  section: SectionOf<"services">;
+  ctx: SectionContext;
+}
+const { section: s, ctx } = Astro.props;
+const Heading = ctx.headingTag;
+const Sub = ctx.subheadingTag;
+const items = await ctx.items("services", s.items);
+---
+
+<section {...sectionAttrs(s)}>
+  <div class="container">
+    {s.heading && <Heading {...field("heading")} set:html={ctx.text(s.heading)} />}
+    {s.intro && <p class="section__intro" {...field("intro")} set:html={ctx.text(s.intro)} />}
+    <ul class="cards">
+      {
+        items.map((it) => {
+          const img = ctx.resolveImage(it.data.image?.src);
+          return (
+            <li class="card" {...entry(it.entry)}>
+              {img && <Image src={img} alt={it.data.image?.alt ?? ""} widths={[400, 800]} sizes="(min-width: 960px) 33vw, 100vw" class="media card__media" />}
+              <Sub class="card__title" {...field("name")} set:html={ctx.text(it.data.name)} />
+              <p {...field("summary")} set:html={ctx.text(it.data.summary)} />
+              {it.data.price && <p class="card__price" {...field("price")} set:html={ctx.text(it.data.price)} />}
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</section>

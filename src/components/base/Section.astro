@@ -1,0 +1,22 @@
+---
+// Renders one section with the most specific component available:
+// src/overrides/sections/<type>.astro, then the theme's, then the base one.
+import type { Section, SectionContext } from "../../lib/site";
+
+interface Props {
+  section: Section;
+  ctx: SectionContext;
+}
+
+const { section, ctx } = Astro.props;
+const modules = import.meta.glob<{ default: unknown }>(
+  ["/src/overrides/sections/*.astro", "/src/theme/sections/*.astro", "/src/components/base/sections/*.astro"],
+  { eager: true },
+);
+const order = ["/src/overrides/sections/", "/src/theme/sections/", "/src/components/base/sections/"];
+const found = order.map((dir) => modules[`${dir}${section.type}.astro`]).find(Boolean);
+if (!found) throw new Error(`No component for section type "${section.type}"`);
+const Component = found.default as (props: Props) => unknown;
+---
+
+<Component {section} {ctx} />

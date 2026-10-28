@@ -1,0 +1,36 @@
+title: Accueil
+slug: ""
+description: Pain au levain et viennoiseries à la Croix-Rousse, Lyon.
+menuOrder: 0
+menuLabel: Accueil
+sections:
+  - type: hero
+    id: hero
+    variant: split
+    heading: Du pain au levain, cuit chaque matin
+    subheading: Ouvert du mardi au dimanche, dès 07:00.
+    image:
+      src: images/hero.jpg
+      alt: Miches de pain au levain sur une étagère en bois
+    button:
+      label: Voir nos horaires
+      href: /contact/
+  - type: services
+    id: specialites
+    variant: grid
+    heading: Nos spécialités
+    items:
+      - levain
+      - viennoiseries
+      - gateaux
+  - type: testimonials
+    id: avis
+    heading: Ce qu'en disent nos clients
+  - type: cta
+    id: commande
+    variant: banner
+    heading: Une commande pour un événement ?
+    body: Passez nous voir ou appelez-nous la veille avant midi.
+    button:
+      label: Nous contacter
+      href: /contact/

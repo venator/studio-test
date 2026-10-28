@@ -1,0 +1,27 @@
+---
+import { Image } from "astro:assets";
+import { field, sectionAttrs } from "../../../lib/markers";
+import type { SectionContext, SectionOf } from "../../../lib/site";
+
+interface Props {
+  section: SectionOf<"logos">;
+  ctx: SectionContext;
+}
+const { section: s, ctx } = Astro.props;
+const Heading = ctx.headingTag;
+---
+
+<section {...sectionAttrs(s)}>
+  <div class="container">
+    {s.heading && <Heading {...field("heading")} set:html={ctx.text(s.heading)} />}
+    <ul class="logos" {...field("logos")}>
+      {
+        s.logos.map((logo) => {
+          const img = ctx.resolveImage(logo.image.src);
+          const pic = img && <Image src={img} alt={logo.image.alt} height={64} class="logos__image" />;
+          return <li>{logo.href ? <a href={logo.href}>{pic}</a> : pic}</li>;
+        })
+      }
+    </ul>
+  </div>
+</section>

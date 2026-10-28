@@ -1,0 +1,85 @@
+---
+import { DAY_KEYS, dayName, labels } from "../../../lib/labels";
+import { field, sectionAttrs } from "../../../lib/markers";
+import type { SectionContext, SectionOf } from "../../../lib/site";
+
+interface Props {
+  section: SectionOf<"contact">;
+  ctx: SectionContext;
+}
+const { section: s, ctx } = Astro.props;
+const Heading = ctx.headingTag;
+const Sub = ctx.subheadingTag;
+const l = labels(ctx.locale);
+const c = ctx.site.contact;
+const hours = ctx.site.hours;
+const showHours = s.showHours !== false && hours && DAY_KEYS.some((d) => hours[d]);
+const showAddress = s.showAddress !== false && c.address;
+const hoursText = (v: string | null | undefined) => (v && v.trim().toLowerCase() === "closed" ? l.closed : v);
+---
+
+<section {...sectionAttrs(s)}>
+  <div class="container split">
+    <div class="split__text">
+      {s.heading && <Heading {...field("heading")} set:html={ctx.text(s.heading)} />}
+      {s.body && <p {...field("body")} set:html={ctx.text(s.body)} />}
+      <dl class="contact-list">
+        {
+          showAddress && c.address && (
+            <>
+              <dt>{l.address}</dt>
+              <dd>
+                <address>
+                  <span set:html={ctx.text(c.address.street)} />
+                  <br />
+                  <span set:html={ctx.text(`${c.address.postalCode} ${c.address.city}`)} />
+                </address>
+              </dd>
+            </>
+          )
+        }
+        {
+          c.phone && (
+            <>
+              <dt>{l.phone}</dt>
+              <dd><a href={`tel:${c.phone.replace(/\s/g, "")}`} set:html={ctx.text(c.phone)} /></dd>
+            </>
+          )
+        }
+        {
+          c.email && (
+            <>
+              <dt>{l.email}</dt>
+              <dd><a href={`mailto:${c.email}`} set:html={ctx.text(c.email)} /></dd>
+            </>
+          )
+        }
+        {
+          c.bookingUrl && (
+            <>
+              <dt>{l.book}</dt>
+              <dd><a class="button" href={c.bookingUrl}>{l.book}</a></dd>
+            </>
+          )
+        }
+      </dl>
+    </div>
+    {
+      showHours && hours && (
+        <div class="split__text">
+          <Sub>{l.hours}</Sub>
+          <table class="hours">
+            <tbody>
+              {DAY_KEYS.filter((d) => hours[d]).map((d) => (
+                <tr>
+                  <th scope="row">{dayName(ctx.locale, d)}</th>
+                  <td set:html={ctx.text(hoursText(hours[d]))} />
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )
+    }
+  </div>
+</section>

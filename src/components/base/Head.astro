@@ -1,0 +1,47 @@
+---
+// Document head shared by every layout: title, description, canonical and
+// language alternates, social preview, structured data, tokens.
+import { localBusinessJsonLd, jsonLdText } from "../../lib/seo";
+import type { Site, Strings } from "../../lib/site";
+
+interface Props {
+  site: Site;
+  strings: Strings;
+  title: string;
+  description?: string | null;
+  path: string;
+  alternates: Array<{ locale: string; path: string }>;
+  locale: string;
+  noindex?: boolean;
+}
+
+const { site, strings, title, description, path, alternates, locale, noindex } = Astro.props;
+const suffix = strings.seo?.titleSuffix;
+const fullTitle = suffix && !title.endsWith(suffix) ? `${title} ${suffix}` : title;
+const desc = description ?? strings.seo?.description ?? strings.tagline ?? "";
+const siteUrl = site.siteUrl ? site.siteUrl.replace(/\/$/, "") : undefined;
+const abs = (p: string) => (siteUrl ? `${siteUrl}${p}` : undefined);
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const plain = (s: string) => s.replace(/\[\[needs:[^\]]*\]\]/g, "").trim();
+const jsonLd = localBusinessJsonLd(site, siteUrl, undefined);
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{plain(fullTitle)}</title>
+{desc && <meta name="description" content={plain(desc)} />}
+{noindex && <meta name="robots" content="noindex" />}
+{abs(path) && <link rel="canonical" href={abs(path)} />}
+{
+  alternates.length > 1 &&
+    alternates.map((a) => abs(a.path) && <link rel="alternate" hreflang={a.locale} href={abs(a.path)} />)
+}
+<meta property="og:type" content="website" />
+<meta property="og:title" content={plain(fullTitle)} />
+{desc && <meta property="og:description" content={plain(desc)} />}
+{abs(path) && <meta property="og:url" content={abs(path)} />}
+<meta property="og:locale" content={locale} />
+<meta property="og:site_name" content={site.businessName} />
+<link rel="stylesheet" href={`${base}/tokens.css`} />
+<link rel="icon" href={`${base}/favicon.svg`} type="image/svg+xml" />
+<script type="application/ld+json" set:html={jsonLdText(jsonLd)} />

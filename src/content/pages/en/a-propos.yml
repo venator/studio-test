@@ -1,0 +1,25 @@
+title: Our story
+slug: about
+menuOrder: 1
+sections:
+  - type: image-text
+    id: histoire
+    variant: image-left
+    heading: A neighbourhood bakery
+    body: |-
+      We bake with stone-ground flour from Auvergne and a sourdough starter fed every day.
+
+      Everything is shaped by hand, in the bakehouse you can see from the shop.
+    image:
+      src: images/fournil.jpg
+      alt: The bakehouse, with the deck oven and proofing baskets
+  - type: team
+    id: equipe
+    heading: The team
+  - type: gallery
+    id: photos
+    variant: grid
+    heading: In the bakehouse
+translation:
+  sourceLocale: fr
+  sourceHash: 8b1c7f883cd45444

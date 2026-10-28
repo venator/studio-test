@@ -1,0 +1,10 @@
+name: Inès
+role: Baker
+bio: Trained in Paris, in Lyon for ten years.
+photo:
+  src: images/ines.jpg
+  alt: Inès in the bakehouse
+order: 1
+translation:
+  sourceLocale: fr
+  sourceHash: fb79aa836c3b9112

@@ -1,0 +1,33 @@
+---
+import { entry, field, sectionAttrs } from "../../../lib/markers";
+import type { SectionContext, SectionOf } from "../../../lib/site";
+
+interface Props {
+  section: SectionOf<"testimonials">;
+  ctx: SectionContext;
+}
+const { section: s, ctx } = Astro.props;
+const Heading = ctx.headingTag;
+const items = await ctx.items("testimonials", s.items);
+---
+
+<section {...sectionAttrs(s)}>
+  <div class="container">
+    {s.heading && <Heading {...field("heading")} set:html={ctx.text(s.heading)} />}
+    <ul class="quotes">
+      {
+        items.map((it) => (
+          <li class="quote" {...entry(it.entry)}>
+            <figure>
+              <blockquote {...field("quote")} set:html={ctx.text(it.data.quote)} />
+              <figcaption>
+                <span {...field("author")}>{it.data.author}</span>
+                {it.data.source && <span class="quote__source" {...field("source")} set:html={ctx.text(it.data.source)} />}
+              </figcaption>
+            </figure>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

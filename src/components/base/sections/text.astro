@@ -1,0 +1,18 @@
+---
+import { field, sectionAttrs } from "../../../lib/markers";
+import type { SectionContext, SectionOf } from "../../../lib/site";
+
+interface Props {
+  section: SectionOf<"text">;
+  ctx: SectionContext;
+}
+const { section: s, ctx } = Astro.props;
+const Heading = ctx.headingTag;
+---
+
+<section {...sectionAttrs(s)}>
+  <div class="container container--narrow">
+    {s.heading && <Heading {...field("heading")} set:html={ctx.text(s.heading)} />}
+    <div class="prose" {...field("body")} set:html={ctx.markdown(s.body)} />
+  </div>
+</section>
