@@ -94,12 +94,6 @@
   origin: fixture
   status: confirmed
   confirmed_at: 2026-10-01T10:00:00Z
-- id: services.levain.price
-  value: 6,80 €
-  source: owner
-  origin: fixture
-  status: confirmed
-  confirmed_at: 2026-10-01T10:00:00Z
 - id: services.viennoiseries.price
   value: 1,40 €
   source: owner
@@ -112,3 +106,9 @@
   origin: fixture
   status: confirmed
   confirmed_at: 2026-10-01T10:00:00Z
+- id: services.levain.price
+  value: 7 €
+  source: owner-studio
+  origin: studio
+  status: confirmed
+  confirmed_at: 2026-10-28T04:20:28Z
